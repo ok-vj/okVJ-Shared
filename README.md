@@ -4,13 +4,13 @@ In the okVJ-Shared folder, most UI elements are available as stand-alone toxes t
 
 - okVJ_UI - explained below.
 - standAloneUIComponent - the okVJ_UI components as stand alone components to be used outside of okVJ_UI, however, some of their functionality are limited in this mode.
-- domeTools - tools related to livePerformce in Domes
+- domeTools - tools related to liveP performce in Domes
 - fxRack - visual effects for live performce - needs an overhaul and will be documented once that is done
 - generators - tools for generating visuals - needs an overhaul and will be documented once that is done
 
 ---
 
-# okVJ_UI — User Manual
+# okVJ_UI.tox — User Manual
 
 _Interactive modular VJ control surface for TouchDesigner_
 
