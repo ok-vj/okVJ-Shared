@@ -1,4 +1,4 @@
-﻿# okVJ-Shared 0.9
+# okVJ-Shared 0.9
 
 In the okVJ-Shared folder, most UI elements are available as stand-alone toxes to be used outside of okVJ_UI, however, some of their functionality are limited in this mode.
 
@@ -422,3 +422,8 @@ The audio input source is configured in the component. Use the Coarse Audio knob
 
 **How do I set up the XY Modulator to react to my sequencer?**
 Add both a Step Sequencer and an Audio Analysis to the panel, and make sure **Create Automatic Mappings** is enabled. okVJ will wire the sequencer's gate output to the XY Modulator's trigger input automatically.
+
+---
+
+https://okvj.live/docs/
+
