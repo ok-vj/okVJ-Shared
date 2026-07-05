@@ -4,6 +4,9 @@ A component that lets you pick shaders from a collection. Shaders are compiled o
 
 You can use the premade shader collections, or build your own (see [Writing a Shader](#writing-a-shader) below).
 
+Why are so many of the shaders clown vomit colored?
+It is made to run well with the multiRecolor component from okVJ that can recolor the shaders to a set color palette.
+
 ## Parameters
 
 ### Setup
