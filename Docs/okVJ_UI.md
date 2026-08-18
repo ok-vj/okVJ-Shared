@@ -1,202 +1,548 @@
-okVJ_UI
-This documentation is incomplete and sometimes out of date, we are working on it. If you find an problem in the docs please raise an issue on GitHub, and we will get it fixed. We'd be very grateful for your contributions on this.
+# okVJ_UI Documentation
 
-okVJ_UI submodules:
+> **Note:** This documentation is incomplete and may be out of date. We are actively working on improving it.
+> If you find an issue or something that is unclear, please open an issue on GitHub. Contributions are very welcome.
 
-common for all modules:
+---
 
-DRAG AND DROP
+## Overview
 
-Common UI interactions:
-move bar - line on top, drag to reposition in the UI.
-x - press to destroy sub module
-hamburger menu - open parameters for this submodule
-+/- add or remove an operator inside the submodule.
+`okVJ_UI` is a collection of UI components for TouchDesigner.
 
-STYLE page
-Matches the okVJ_UI style page by default.
-Toggle "Match UI" to set style individually for this submodule
+The following sections describe the common functionality shared by most modules, followed by documentation for individual submodules.
 
-COMMON page:
-Edit Mode: read Only - tracks the state of UIs edit mode
-Include in Preset: toggle to include in the preset manager
-Page: which okVJ_UI page the element is displayed on
-Show on all pages: toggle to show on all pages
+---
 
-INTERACT PAGE:
-Contains the values that can be interacted with from the UI
+# Common Features
 
-VALUES PAGE:
-the interactable values on sliders, buttons and knobs. both inputs and outputs.
+## MIDI Mapping
 
-OUTPUTS:
-the outputs from the sub module
+Most interactive UI elements can be mapped to MIDI.
 
-FINE CTRL:
-special tweakable parameters with more fine controls
+### Setup
 
-INPUTS
-Some components take inputs from other sub-modules in the okVJ_UI, and they only have full functionality if they have something referenced to their inputs.
-if ** Create Automatic Mappings ** is toggeled, the component will search the okVJ_UI and create automatic references. This is toggeled on by default.
+Connect a MIDI In CHOP to the `midi_in` input of the `okVJ_UI` component.
 
+The input does not have to be MIDI. Any CHOP can be used if you want to map UI parameters from another source, such as OSC or a custom control system.
 
----------
-SUBMODULES
-------------
+### Entering MIDI Map Mode
+
+There are several ways to enter MIDI Map Mode:
+
+* Click **MIDI Map** in the top-right corner of the UI.
+* Press `Ctrl + Shift + M` on Windows/Linux.
+* Press `Cmd + Shift + M` on macOS.
+* Enable **MIDI Map** under the **GENERAL** page.
+
+When MIDI Map Mode is active, a yellow outline appears around the UI component.
+
+### Creating a MIDI Mapping
+
+1. Enter MIDI Map Mode.
+2. Click the UI element you want to map.
+3. Move a MIDI control on your MIDI device.
+4. The UI element is now mapped to that MIDI control.
+
+To remove a mapping, right-click the mapped UI element.
+
+### MIDI Settings
+
+The **GENERAL** page contains the following MIDI settings:
+
+| Parameter                    | Description                                                                                                                             |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **MIDI Map**                 | Enables or disables MIDI Map Mode.                                                                                                      |
+| **MIDI Range**               | Defines the expected MIDI input range. Use `0-127` or `0-1`, depending on the source. An incorrect range can cause unexpected behavior. |
+| **Toggle Behavior**          | Controls how toggle buttons respond to MIDI.                                                                                            |
+| **View MIDI Map Table**      | Opens a table showing all current MIDI mappings.                                                                                        |
+| **Remove All MIDI Mappings** | Removes all MIDI mappings from the UI.                                                                                                  |
+
+### Toggle Behavior
+
+Toggle buttons have two MIDI modes:
+
+* **Toggle with MIDI** — The button toggles when it receives an ON message and toggles off when it receives another OFF message.
+* **Follow MIDI** — The button follows the current state of the MIDI input.
+
+---
+
+# Preset Manager
+
+Only **one Preset Manager** can be active in a project.
+
+The Preset Manager can store and recall the state of UI elements.
+
+Each submodule has an **Include in Preset** parameter on its **COMMON** page. Disable this parameter to exclude that submodule from preset storage and recall.
+
+## Storing a Preset
+
+1. Enter a preset name in the text field.
+2. Press **Enter** or click **Learn Preset**.
+3. The preset appears in the preset dropdown.
+
+## Recalling a Preset
+
+Select a preset from the dropdown.
+
+The Preset Manager uses **flash recall**, meaning the UI immediately switches to the selected preset.
+
+If you press the currently selected preset, if for example you want to switch back to the same preset after changing states, the UI starts fading toward that preset.
+
+---
+
+# Drag and Drop
+
+Many `okVJ_UI` elements support drag-and-drop connections.
+
+# Common UI Controls
+
+### Move Bar
+
+The line at the top of a submodule.
+
+Drag it to reposition the module in the UI.
+
+### X Button
+
+Destroys the submodule.
+
+### Hamburger Menu
+
+Opens the parameters for the submodule.
+
+### + / - Buttons
+
+Add or remove operators inside the submodule.
+
+---
+
+# STYLE Page
+
+By default, submodules use the style defined on the main `okVJ_UI` **STYLE** page.
+
+Enable **Match UI** to override the style for an individual submodule.
+
+---
+
+# COMMON Page
+
+Common parameters shared by submodules include:
+
+| Parameter             | Description                                                         |
+| --------------------- | ------------------------------------------------------------------- |
+| **Edit Mode**         | Read-only parameter that reports the current UI Edit Mode state.    |
+| **Include in Preset** | Determines whether the submodule is included in the Preset Manager. |
+| **Page**              | Selects which `okVJ_UI` page displays the element.                  |
+| **Show on All Pages** | Displays the element on every UI page.                              |
+
+---
+
+# INTERACT Page
+
+Contains parameters that can be directly controlled through the UI.
+
+---
+
+# VALUES Page
+
+Contains the input and output values of interactive controls such as:
+
+* Sliders
+* Buttons
+* Knobs
+* Other interactive elements
+
+---
+
+# OUTPUTS
+
+Contains the output values generated by the submodule.
+
+---
+
+# FINE CTRL
+
+Contains additional parameters for more precise control of the submodule.
+
+---
+
+# INPUTS
+
+Some components receive inputs from other `okVJ_UI` submodules.
+
+These inputs may be required for the component to have full functionality.
+
+## Create Automatic Mappings
+
+When **Create Automatic Mappings** is enabled, the component searches the current `okVJ_UI` and automatically creates references to compatible inputs.
+
+This option is enabled by default.
+
+---
+
+# Submodules
 
 ## Audio Analysis
-Analyses audio and turns it into 4 float values and 4 triggers. low mid high and total.
-Interact from the UI:
-* main slider: sets the main attenuation
-* trigger threshold low - mid - hig - total: sets the threshold, when audio crosses this threshold the corresponding trigger fires.
-* drag and drop - drag from the audio bars to get the audio val (float) of the corresponding filter. drag from the spectrum triggers to get the trigger of the corresponding trigger.
 
-PARAMETERS:
-Interact: the parameters that can be set from the UI
+Analyzes an audio signal and generates four continuous values and four triggers:
 
-FINCE CTRL:
-Normalize Audio - normalize the input audio to 0-1 range, messes with fidelity a bit, but makes it easier to deal with volume changes, since it gets normalized.
-Threshold - the threshold over which the normalizeation kicks in, keep above 0 to avoid a division by 0
+* Low
+* Mid
+* High
+* Total
 
+### Interact
 
-Filter:
-Three bands of filters one for each.
-"Filter" - menu of filter type - low pass, band pass, high pass etc
-Filter cutoff in hz
-filter resonance
-Rolloff - steepness of filter in db per octave
-Attenuate - attenuation post filtering and RMS
+The following parameters can be controlled from the UI:
 
-Smoothing - the smoothness of the signal
+* **Main Slider** — Controls the main audio attenuation.
+* **Trigger Threshold Low** — Threshold for the low-frequency trigger.
+* **Trigger Threshold Mid** — Threshold for the mid-frequency trigger.
+* **Trigger Threshold High** — Threshold for the high-frequency trigger.
+* **Trigger Threshold Total** — Threshold for the total audio trigger.
 
-OUTPUTS:
-low, mid, high, total val - float value of analyzed audio
-low, mid, high, total trigger - the trigger when the analyzed audio crosses the corresponding trigger threshold
+When the audio level crosses a trigger threshold, the corresponding trigger fires.
 
+### Drag and Drop
 
+Drag from an audio level bar to obtain the corresponding audio value.
+
+Drag from a spectrum trigger to obtain the corresponding trigger output.
+
+### Parameters
+
+#### Interact
+
+Parameters that can be controlled directly from the UI.
+
+#### Fine CTRL
+
+**Normalize Audio**
+
+Normalizes the input audio to a `0-1` range.
+
+This makes the system less sensitive to changes in input volume, but can reduce some signal fidelity.
+
+**Threshold**
+
+Defines the level above which normalization is applied.
+
+Keep this value above `0` to avoid division-by-zero issues.
+
+### Filter
+
+Each frequency band has its own filter.
+
+Available parameters include:
+
+* **Filter** — Selects the filter type, such as low-pass, band-pass, or high-pass.
+* **Filter Cutoff** — Filter cutoff frequency in Hz.
+* **Filter Resonance** — Controls filter resonance.
+* **Rolloff** — Controls filter steepness in dB per octave.
+* **Attenuate** — Applies attenuation after filtering and RMS calculation.
+* **Smoothing** — Controls smoothing of the output signal.
+
+### Outputs
+
+| Output            | Description                                                   |
+| ----------------- | ------------------------------------------------------------- |
+| **Low Val**       | Low-frequency audio level.                                    |
+| **Mid Val**       | Mid-frequency audio level.                                    |
+| **High Val**      | High-frequency audio level.                                   |
+| **Total Val**     | Total analyzed audio level.                                   |
+| **Low Trigger**   | Trigger generated when the low level crosses its threshold.   |
+| **Mid Trigger**   | Trigger generated when the mid level crosses its threshold.   |
+| **High Trigger**  | Trigger generated when the high level crosses its threshold.  |
+| **Total Trigger** | Trigger generated when the total level crosses its threshold. |
+
+---
 
 ## Audio Mixer
-A component that allows you to channel mix the analyzed audio values. So you don't need to hardcode low/mid/high in your scenes. It can be changed on the fly
 
-Interact from the UI:
-    from left to right - low - mid - high attenuation
+Combines the analyzed audio values into a single output.
 
-INPUTS:
-    by default maps from audio analysis component
-    Low, Mid, High Val
+This allows you to change the balance between low, mid, and high frequencies without hard-coding the mix in your scenes.
 
-INTERACT:
-    low - mid - high attenuation
+### Inputs
 
-OUTPUTS:
-    Audio Val - the sum of low mid high post attenuation.
+By default, the inputs are automatically connected to the **Audio Analysis** component:
+
+* Low Val
+* Mid Val
+* High Val
+
+### Interact
+
+Three attenuation controls are available:
+
+* Low
+* Mid
+* High
+
+The controls are arranged from left to right as:
+
+**Low → Mid → High**
+
+### Output
+
+**Audio Val**
+
+The combined low, mid, and high values after attenuation.
+
+---
 
 ## Buttons
-    simple buttons, momentary or toggle
 
-SET UP:
-    Max per line: the amount of buttons before it swaps line. if you want 8 knobs on 2 lines - set max per line to 4
+A collection of simple buttons.
 
-    Spacing (px): set the spacing between operators in panel units (px)
+Buttons can operate in either **Momentary** or **Toggle** mode.
 
-Button Mode: Set buttons to toggle or momentary
+### Setup
 
-Styling:Set styling of button
+**Max Per Line**
 
-Values:
-    The input and output values and parameters of the buttons
-    parameter name: Buttons{i}press
+Defines how many buttons are displayed before starting a new line.
+
+For example, to display 8 buttons across 2 lines, set **Max Per Line** to `4`.
+
+**Spacing (px)**
+
+Sets the spacing between buttons in panel units/pixels.
+
+**Button Mode**
+
+Selects between:
+
+* Toggle
+* Momentary
+
+### Styling
+
+Controls the visual style of the buttons.
+
+### Values
+
+Contains the input and output values of the buttons.
+
+Button parameters use the following naming convention:
+
+```text
+Buttons{i}press
+```
+
+Where `{i}` is the button index.
+
+---
 
 ## Hue Picker
-    an HSV Selector
-Interact:
-    Hue, Saturation, Value
 
-Outputs:
-    RGB - hsv value in rgb
-    drag from the hue selector to drop the RGB parameter 
+An HSV color selector.
 
-Fine CTRL:
-    Hue Range - select a specific part of the hue spectrum to isolate
-    Hue steps - the amount of steps in the hue
-    Smoothing - the smoothness (filtering) of the change
-    
-    
+### Interact
+
+The following values can be controlled:
+
+* Hue
+* Saturation
+* Value
+
+### Output
+
+**RGB**
+
+Outputs the selected HSV color converted to RGB.
+
+You can drag from the hue selector to create an RGB parameter connection.
+
+### Fine CTRL
+
+**Hue Range**
+
+Limits the selectable hue range.
+
+**Hue Steps**
+
+Defines the number of discrete steps in the hue range.
+
+**Smoothing**
+
+Controls smoothing/filtering of the color changes.
+
+---
 
 ## Knobs
-    a bank of rotary knobs
 
-SET UP:
-    Max per line: the amount of buttons before it swaps line. if you want 8 knobs on 2 lines - set max per line to 4
-    Spacing (px): set the spacing between operators in panel units (px)
-    Reset Val - the value that resets by right clicking
+A bank of rotary knobs.
 
-Styling:
-    Set styling of button
+### Setup
 
-Values:
-    The input and output values and parameters of the buttons
-    parameter name: Knobs{i}val
+**Max Per Line**
+
+Defines how many knobs are displayed before starting a new line.
+
+For example, to display 8 knobs across 2 lines, set **Max Per Line** to `4`.
+
+**Spacing (px)**
+
+Sets the spacing between knobs.
+
+**Reset Val**
+
+Defines the value applied when the knob is right-clicked.
+
+### Styling
+
+Controls the visual style of the knobs.
+
+### Values
+
+Contains the input and output values of the knobs.
+
+Knob parameters use the following naming convention:
+
+```text
+Knobs{i}val
+```
+
+Where `{i}` is the knob index.
+
+---
 
 ## Notes
-    A component to type and display notes
+
+A text component used to enter and display notes.
+
+---
 
 ## opViewer
-    Display any OP from touchdesigner
-    Toggle interactive to make it interactive
+
+Displays any TouchDesigner OP.
+
+Enable **Interactive** to allow interaction with the displayed OP.
+
+---
 
 ## paletteGenerator
-    (slightly depreciated)
-    generate a color ramp from a base color and harmonies
 
-    select a base color with the hsv selector.
-    toggle different color harmonies with the buttons.
+> **Status:** Slightly deprecated.
+
+Generates a color ramp from a base color and selected color harmonies.
+
+### Usage
+
+1. Select a base color using the HSV selector.
+2. Enable the desired color harmonies using the buttons.
+3. The component generates the corresponding color ramp.
+
+---
 
 ## Radio Buttons
-    a collection of radio buttons.
-    only one of the buttons can be selected at the time - outputs a zero indexed integer index about what button in currently on.
 
-SETUP:
-    Max per line: the amount of buttons before it swaps line. if you want 8 knobs on 2 lines - set max per line to 4
+A collection of radio buttons where only one button can be selected at a time.
 
-    Spacing (px): set the spacing between operators in panel units (px) 
-    Styling:Set styling of button
+The output is a **zero-indexed integer** representing the currently selected button.
 
-    DAT Table:
-        link a dat table. it will create buttons based on table.numRows
-        the content of each row will fill the labels.
+### Setup
 
-        Toggle * exlude fist row *  if you have a header
+**Max Per Line**
 
-        Collumn index: which collumn to read a label from
+Defines how many buttons are displayed before starting a new line.
 
-        You can also drag and drop a dat table or DAT parameter object to the UI
+For example, to display 8 buttons across 2 lines, set **Max Per Line** to `4`.
 
-        You can also drag a menu parameter from touchdesigner, and it will create a dat table for it.
-        NOTE: if you drag a menu parameter - this will not update if the menu parameter updates
+**Spacing (px)**
 
-    Drag from any button to get the Index parameter
+Sets the spacing between buttons.
+
+**Styling**
+
+Controls the visual style of the buttons.
+
+### DAT Table
+
+A DAT table can be linked to the Radio Buttons component.
+
+The component creates one button for each row in the table.
+
+The contents of each row are used as button labels.
+
+#### Parameters
+
+**Exclude First Row**
+
+Enable this if the DAT contains a header row.
+
+**Column Index**
+
+Selects which column is used for the button labels.
+
+### Drag and Drop
+
+You can drag and drop the following into the Radio Buttons component:
+
+* A DAT table
+* A DAT parameter object
+* A TouchDesigner menu parameter
+
+When a menu parameter is dropped, it is converted into a DAT table.
+
+> **Note:** A DAT table created from a menu parameter will not automatically update when the original menu parameter changes.
+
+### Output
+
+Drag from any radio button to create a connection to the **Index** parameter.
+
+The Index is a zero-based integer representing the selected button.
+
+---
 
 ## Sliders
-    A collection of sliders
 
-    Spacing (px): set the spacing between operators in panel units (px)
-    Orientation: the orientation of the slider
-    Reset Val - the value that resets by right clicking
+A collection of sliders.
 
-VALUES:
-    The input and output values and parameters of the buttons
-    parameter name: Sliders{i}val
-    
-    
+### Setup
+
+**Spacing (px)**
+
+Sets the spacing between sliders.
+
+**Orientation**
+
+Controls the orientation of the sliders.
+
+**Reset Val**
+
+Defines the value applied when a slider is right-clicked.
+
+### Values
+
+Contains the input and output values of the sliders.
+
+Slider parameters use the following naming convention:
+
+```text
+Sliders{i}val
+```
+
+Where `{i}` is the slider index.
+
+---
+
 ## stepSeq
- INPUTS: Audio Triggers low mid high total
-    by default linked to the audio analysis component
+
+A step sequencer.
+
+### Inputs
+
+By default, the component receives audio triggers from the **Audio Analysis** component:
+
+* Low Trigger
+* Mid Trigger
+* High Trigger
+* Total Trigger
+
+---
 
 ## timeKeeper
-    
-
-
-
-
-
+speed generator - can be used instead of absTime.seconds for eg
+> Documentation to be added.
