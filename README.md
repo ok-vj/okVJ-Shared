@@ -1,456 +1,281 @@
-# okVJ-Shared 0.9
-This documentation is incomplete and sometimes out of date, we are working on it. If you find an problem in the docs please raise an issue on GitHub, and we will get it fixed. We'd be very grateful for your contributions on this.
+# okVJ
 
+`okVJ` is a toolkit for building interactive controls, scene systems, audio-reactive interfaces, presets, MIDI mappings, and other live-performance tools in [TouchDesigner](https://derivative.ca/).
 
-In the okVJ-Shared folder, most UI elements are available as stand-alone toxes to be used outside of okVJ_UI, however, some of their functionality are limited in this mode.
+Often when creating live performances, requirements change. Visions change. Deadlines are short. Technical requirements are not always fulfilled.
 
-- okVJ_UI - explained below.
-- standAloneUIComponent - the okVJ_UI components as stand alone components to be used outside of okVJ_UI, however, some of their functionality are limited in this mode.
-- mappings - Tools for mapping and live performance in domes
-- fxRack - Visual effects for live performance. This section needs an overhaul and will be documented later.
-- generators - Tools for generating visuals. - a shaderChanger and a sceneChanger.
+In order to build live performances powered entirely by TouchDesigner, we created `okVJ` as a toolkit.
 
----
+It is a collection of the components we have needed and the components we reach for when preparing live shows. They are built to be modular and designed to fit different ways of organizing a set.
 
-# okVJ_UI.tox — User Manual
+It is an evolving collection of tools that includes a UI builder, scene changer and shader changer - for creating content, FX racks for processing visuals, mapping tools, and more.
 
-_Interactive modular VJ control surface for TouchDesigner_
+The toolkit is designed to make complex TouchDesigner systems easier to build, control, reuse, and perform with.
 
 ---
 
-## What is okVJ_UI?
+# Installation
 
-Just drop it into your TD-project. You can only have one okVJ_UI tox in your project file.
+Download the latest release using the green **Release** button.
 
-okVJ_UI is a modular control surface that lives inside your TouchDesigner project. It lets you build a custom interface from components — sliders, sequencers, modulators, knobs, and buttons and more — and map them to your project parameters and MIDI devices quickly and easilly.
+Or clone the repository if you're feeling brave.
 
-It runs in two modes: a live mode (default) and an **Edit** mode for building your layout.
+The repository contains the components.
 
----
+Drag and drop the components you want to use into your TouchDesigner project.
 
-## Perform Bar
-
-The perform bar runs across the top of the UI and is always visible. From left to right: You can hide in the okVJ_UI parameters.
-
-| Element          | Description                                                              |
-| ---------------- | ------------------------------------------------------------------------ |
-| FPS              | Current frames per second                                                |
-| BPM              | Enter a BPM value, or use the Tap Tempo component                |
-| Resolution X / Y | Global resolution reference. Use it in your project through parameter bindings |
-| Midi Map         | Toggle MIDI map mode — `Ctrl+Shift+M`                                    |
-| Edit Mode        | Toggle edit mode — `Ctrl+Shift+E`                                        |
-| Hamburger Menu   | Global okVJ UI settings, including colors, resolution, and Match UI              |
+We recommend starting with the `okVJ_UI` component and building from there.
 
 ---
 
-## Edit Mode
+# Design Philosophy
 
-### Entering & exiting
+`okVJ` is built around a few principles.
 
-Toggle with the `Edit Mode` button (top right) or `Ctrl+Shift+E`. Same action gets you in and out.
-Layout controls are disabled outside Edit mode. This helps prevent accidental changes during a performance.
+## Ease of Use
 
-### Adding a component
+Performing shouldn't involve a lot of menu diving.
 
-1. Double-click - or press TAB - in the UI panel to open the component picker
-2. Select a component. It appears at the cursor position.
-3. Drag the move bar to move the component. Drag the edges to resize it.
-4. Use the X button to delete the component.
-   > **Note:** If a component has `+` / `−` buttons, use them to add or remove elements inside that component.
+It is easy to be stupid when performing. We are speaking from personal experience.
 
-### Moving & resizing
+`okVJ` tries to limit your ability to do something dumb, so you can focus on performing well instead of focusing on not messing up.
 
-- Drag the **move bar** to reposition a component freely within the panel
-- Drag any **edge** to resize
-- If **Snap to Grid** is enabled, position and size both snap to your configured grid step (set this up in the STYLE page on okVJ_UI)
-- Labels are editable in edit mode — you can tab through them
+**Too few parameters are better than too many.**
 
-### Per-component controls
+## Modular
 
-These are only visible in edit mode:
+Components should be useful independently, but should also work together as larger systems.
 
-| Control        | Description                                               |
-| -------------- | --------------------------------------------------------- |
-| `×`            | Delete the component                                      |
-| `+` / `−`      | Add or remove internal elements (on supported components) |
-| Hamburger menu | Per-component settings                                    |
+We don't want to dictate how you organize your TouchDesigner projects.
 
-### Connecting controls to your TD network
+## Real Time Is King
 
-Drag a parameter from a component into your TouchDesigner network to create a reference or binding. You can do this directly from the UI in Edit mode. Most interactive parameters support this method. It is the main way to connect UI controls to TouchDesigner operators without writing expressions manually.
+Interactive systems should remain practical in real-time TouchDesigner projects.
 
-You can also drag parameters from the component's parameters. Output values are found under the **VALUES** or **OUTPUTS** tab. There is also an output CHOP on okVJ_UI available if you prefer that approach, though drag-and-drop is generally cleaner.
+They should run in real time.
 
----
+## File Sizes Are Small
 
-## MIDI Map Mode
+An often-overlooked benefit of procedural workflows is that entire project files can be developed across the world and passed back and forth over WhatsApp.
 
-### Mapping a control
+We aren't trying to demoscene this, but a project file should still fit on a thumb drive.
 
-1. Press `Midi Map` in the top right, or `Ctrl+Shift+M`
-2. Click a UI element to arm it — it will wait for input
-3. Move a knob, fader, or button on your MIDI device — the mapping is created automatically.
-4. Right-click a mapped element to remove its mapping, or press **Remove All Midi Mappings** in the okVJ_UI parameters under the **GENERAL** tab, to clear all
-5.Under the **GENERAL** tab on okVJ_UI you have acess to more midi option.
+## Production-Oriented
 
-### Preventing value jumps
+The toolkit is designed around the needs of actual creative production rather than isolated demonstrations.
 
-When you switch presets or move a parameter with the mouse and then pick up a MIDI control, the value can jump abruptly. To prevent this, enable **MIDI Channel Pickup** under the **General** tab. The MIDI control won't take effect until its physical position crosses the current on-screen value.
+These are tools we use when making shows.
 
-### MIDI settings
+## Performative
 
-Open the okVJ_UI parameters **General** tab to configure:
-
-| Setting             | Description                                                                                                                           |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| MIDI Range          | Choose 0–1 or 0–127 input range                                                                                                       |
-| MIDI Channel Pickup | When on, a MIDI control only takes effect after its value crosses the current on-screen value — prevents jumps when switching presets |
-| Toggle Behavior         | Set the toggle Behavior, when "toggle with midi" a button press will toggle a toggle button. when "follow midi", it will be the same value as the midi, so it won't have internal toggle logic.
-|View Midi Map Table | view the table of midi mappings
-|Remove All Midi Mappings|removes ALL midi mappings
+Interfaces should work well for live interaction, including MIDI control, scene switching, presets, and audio-reactive workflows.
 
 ---
 
-## Presets Manager
+# okVJ_UI
 
-Open the preset manager from the hamburger menu. It appears at your current cursor position. All components with **Include in Preset** enabled will be stored and recalled.
+`okVJ_UI` is the UI system at the center of the toolkit.
 
-This component wraps Alpha Moonbase's [Tau Ceti](https://github.com/PlusPlusOneGmbH/TauCeti) preset engine, with minor internal edits marked clearly inside. Components are added to the Tau Ceti stack automatically. To opt a component out, toggle **Include in Preset** off under its **COMMON** page.
+It provides a collection of reusable UI components and systems that can be combined to build interfaces for:
 
-**Using the preset manager:**
+* Live visual performance
+* VJ and audiovisual systems
+* Installations
+* Interactive media
+* Generative graphics
+* Audio-reactive systems
+* Stage and show control
+* Prototyping
 
-- Type a preset name in the text field and press **Learn** to save
-- Select a preset from the scroll list.
-- Use the transition time slider to set the transition duration.
-- **RECALL** — recall a preset; **STOP** — cancel a transition in progress
-- Toggle **Flash Recall** on to switch immediately as soon as a new preset is selected
-- You can also remove, rename, or replace the selected preset, or remove all presets.
-
-Use **MIDI Channel Pickup** to smoothly transition from a recalled preset back to physical MIDI control without value jumps.
-
----
-
-## UI Parameters (Hamburger Menu)
-
-| Parameter                  | Description                                                               |
-| -------------------------- | ------------------------------------------------------------------------- |
-| UI Resolution              | Sets the resolution of the UI panel                                       |
-| Color Themes               | Apply a premade color theme to all components                             |
-| Match all elements with UI | Pushes the current style settings to all components with Match UI enabled |
-| Snap to Grid               | Quantizes component position and size to a grid                           |
-| Edit Mode                  | Toggle edit mode                                                          |
-| Midi Map                   | Toggle MIDI map mode                                                      |
-
-### Color themes
-
-Select a color theme from the hamburger menu — colors update across all matching components. Components with **Match UI** enabled will sync automatically. You can also adjust colors per-component or override them globally from the okVJ UI settings page.
-
-### Snapping
-
-When **Snap to Grid** is enabled, component positions and sizes are quantized to the grid step size you set. Useful for keeping a clean, aligned layout.
+The toolkit includes both simple controls and larger systems for managing scenes, presets, audio analysis, MIDI control, and shared parameters.
 
 ---
 
-## Sub-Components
+## Features
 
-All okVJ component outputs and expected inputs and outputs are normalized to a **0–1 range**.
-Most sub-components share these traits:
+### Modular UI Components
 
-- **MIDI-mappable** — can be assigned to a MIDI control in MIDI Map mode
-- **Presettable** — values are saved and recalled by the preset manager
-- **Labels** — each element displays an editable label; you can tab through them in edit mode
-- **Add / remove elements** — use the `+` / `−` buttons in edit mode to change the number of elements inside the component
+Build interfaces from reusable components such as:
 
-## The outputs are found under the VALUES or OUTPUTS tab
+* Buttons
+* Sliders
+* Knobs
+* Radio Buttons
+* Hue Picker
+* Notes
+* OP Viewers
+* XY Pads
+* Preset Manager
+* Audio Analysis and Mixer
+* Step Sequencer
+* And more
 
-### Knobs
+Components are designed to work independently while sharing a common structure and workflow.
 
-A group of rotary knobs.
+### MIDI Mapping
 
-| Parameter    | Description                              |
-| ------------ | ---------------------------------------- |
-| Max per Line | How many knobs appear per row            |
-| Spacing      | Space between knobs                      |
-| Reset Val    | Value each knob resets to on right-click |
+Interactive parameters can be mapped directly to MIDI controllers with one click.
 
----
+Mapping can also use non-MIDI CHOP sources, such as OSC or custom control systems.
 
-### Sliders
+### Preset Management
 
-A group of sliders.
+The toolkit includes preset functionality for storing and recalling UI states.
 
-| Parameter   | Description                                |
-| ----------- | ------------------------------------------ |
-| Orientation | Horizontal or vertical layout              |
-| Spacing     | Space between sliders                      |
-| Reset Val   | Value each slider resets to on right-click |
+Presets can be recalled instantly or transitioned over time, making them suitable for both interactive tools and performance environments.
 
----
+### Scene Changer
 
-### Buttons
+The Scene Changer provides a system for switching between complete custom scenes.
 
-A group of buttons.
+Scenes can be stored in Scene Banks and recalled quickly without rebuilding their state each time.
 
-| Parameter    | Description                           |
-| ------------ | ------------------------------------- |
-| Max per Line | How many buttons appear per row       |
-| Spacing      | Space between buttons                 |
-| Button Mode  | **Toggle** (default) or **Momentary** |
-| Styling      | Visual style of the buttons           |
+The system also includes configurable memory-management strategies and scene gating to help ensure that inactive scenes do not cook when they shouldn't.
 
-> **Note on MIDI + Toggle mode:** When a toggle button is MIDI-mapped, it reads the raw incoming MIDI value rather than flipping its own state — so all buttons effectively behave as momentary from the MIDI side. Configure your MIDI controller to send toggle values if you need latching behaviour. Or set the **Toggle Behavior** in the midi settings to "toggle with midi - toggleOn"
-
----
-
-### XY Pad
-
-A bank of two-axis XY pads. Each pad outputs two values (X and Y), both normalized 0–1.
-
-| Parameter    | Description                     |
-| ------------ | ------------------------------- |
-| Max per Line | How many XY pads appear per row |
-| Spacing      | Space between pads              |
-
-> **MIDI mapping an XY pad:** Enter MIDI Map mode, click the pad to arm it, then move one MIDI control to map X — the pad will immediately wait for a second control to map Y.
-
----
-
-### Radio Buttons
-
-An array of buttons where only one can be active at a time. Outputs the zero-indexed **integer index** of the selected button.
-
-| Parameter    | Description                     |
-| ------------ | ------------------------------- |
-| Max per Line | How many buttons appear per row |
-| Spacing      | Space between buttons           |
-| Styling      | Visual style of the buttons     |
-
-**DAT Table:**
-
-Reference a DAT table to drive the button array dynamically:
-
-- The number of buttons is set by the number of rows in the table
-- Labels are read from a chosen column — set which one with **Column Index**
-- Toggle **Include First Row** off to skip a header row
-- you can drag and drop a DAT table to the UI to reference it.
-- you can also drag a menu parameter to create a button list from it
-
----
-
-## Complex Components
-
-The following components are more complex operators that perform logic and can automatically map and interact with each other.
-
-**INTERACT** — parameters that can be controlled from the UI, via mouse, MIDI, or the preset manager.
-
-**INPUTS** — for components that require an input. If **Create Automatic Mappings** is enabled, okVJ will automatically map to compatible components in the panel. You can also create manual mappings under the INPUTS tab — toggle Automap off in that case. Certain UI elements will be disabled until something is linked to their parameters.
-
-Some components also have a **FINE CTRL** tab for more specialized controls.
-
----
+A small preset manager is also included for quickly switching between different scene presets.
 
 ### Audio Analysis
 
-Analyzes an audio signal and outputs:
+Audio Analysis provides continuous values and triggers for:
 
-- 4 float values — low, mid, high, and total
-- 4 audio triggers — low, mid, high, and total
+* Low frequencies
+* Mid frequencies
+* High frequencies
+* Total audio level
 
-The audio input source is configured in the component itself. Use the **Coarse Audio** knob to set input level, and the FINE CTRL band settings to isolate the frequency ranges you want to react to.
+These values can be used throughout a project to create responsive visual and interactive systems.
 
-**INTERACT:**
+### Audio Mixer
 
-| Parameter    | Description                                                                                                       |
-| ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Coarse Audio | Coarse control of audio input level                                                                               |
-| Trigger Vals | Threshold values — when the audio signal crosses a threshold, an audio trigger fires (visible on the UI spectrum) |
+Audio Mixer combines the analyzed frequency bands into a controllable output.
 
-**FINE CTRL:**
+This makes it possible to adjust the balance between low, mid, and high frequencies without hard-coding the mix into individual scenes.
 
-Three frequency bands (low, mid, high), each with:
+### Shared Scene Parameters
 
-| Parameter        | Description                    |
-| ---------------- | ------------------------------ |
-| Filter Type      | Lowpass, bandpass, or highpass |
-| Filter Cutoff    | Cutoff frequency in Hz         |
-| Filter Resonance | Resonance amount               |
-| Filter Rolloff   | Rolloff in dB per octave       |
-| Attenuate        | Per-band output attenuation    |
+Scene Banks can define parameters once and make them available to multiple scenes.
 
-**Drag & drop:** Drag audio values from the audio bars; drag triggers from the indicator on the spectrum visualizer.
+This allows a collection of scenes to share the same control system while remaining independent internally.
 
----
+### Drag and Drop Connections
 
-### Step Sequencer
+Many components support drag-and-drop connections directly in the TouchDesigner UI.
 
-> Recommended: Add an Audio Analysis component to the panel for full functionality.
-
-The sequencer can run without Audio Analysis — if no audio triggers are connected or **BPM Mode** is on, it clocks from the global BPM instead.
-
-**INPUTS:**
-
-4 trigger inputs — low, mid, high, and total. If none are provided, or if BPM Mode is enabled, the sequencer uses the global BPM as its clock.
-
-**INTERACT:**
-
-| Parameter               | Description                                                                        |
-| ----------------------- | ---------------------------------------------------------------------------------- |
-| BPM Mode                | Toggle between BPM clock and audio trigger clock                                   |
-| Trigger Index (LMHT)    | Which trigger input is used as the clock source — also selectable via UI buttons   |
-| Reset                   | Reset the sequence to step zero                                                    |
-| Release                 | Envelope release time in seconds                                                   |
-| Selected Sequence Index | Zero-indexed — selects which of the four sequences is active                       |
-| Sequence ID             | Current sequence as an integer (read-only) — used by the preset manager for recall |
-
-> **Note:** Sequence step buttons are not MIDI-mappable. All other UI elements are.
-
-**OUTPUTS:**
-
-- Selected sequence envelope
-- Selected sequence gate
-- All four sequences are individually available for reference
-
-**FINE CTRL:**
-
-| Parameter       | Description                          |
-| --------------- | ------------------------------------ |
-| Sequence Length | Number of steps                      |
-| BPM Subdivision | Clock subdivision relative to BPM    |
-| Gate Mode       | Output a trigger or a sustained gate |
-
-**Drag & drop:** Drag from the sequence selection panel to use the sequence envelope elsewhere in your network.
+This makes it possible to build and connect systems without manually creating every parameter reference.
 
 ---
 
-### XY Modulator
+# Getting Started
 
-> Recommended: Add Audio Analysis and Step Sequencer to the panel for full functionality.
+A typical `okVJ_UI` project starts with the main UI component and one or more submodules.
 
-To set up the XY Modulator to react to your sequencer, add both a Step Sequencer and an Audio Analysis to the panel and make sure **Create Automatic Mappings** is enabled. okVJ will wire the sequencer's gate output to the XY Modulator's trigger input automatically.
+Most submodules share a common structure:
 
-**INTERACT:**
+* **COMMON** — General component settings
+* **INTERACT** — Parameters controlled directly through the UI
+* **VALUES** — Input and output values
+* **FINE CTRL** — Additional control parameters
+* **INPUTS** — Connections to other components
+* **OUTPUTS** — Generated outputs
+* **STYLE** — Visual styling
 
-| Parameter   | Description                |
-| ----------- | -------------------------- |
-| Audio React | Toggle audio reactivity    |
-| Speed       | Movement speed             |
-| Amplitude   | Movement amplitude         |
-| Smooth      | Amount of output smoothing |
-
-**Type select:**
-
-| Index | Mode          | Description                                                                                                  |
-| ----- | ------------- | ------------------------------------------------------------------------------------------------------------ |
-| 0     | Sin/Cosine    | Circular motion using a sine/cosine pair                                                                     |
-| 1     | Noise         | Sparse noise — shape adjustable in FINE CTRL                                                                 |
-| 2     | Sample & Hold | Jumps to a random position on each trigger (from sequencer gate, BPM, or audio triggers in Audio React mode) |
-| 3     | Manual        | Use the XY pad directly, or bind MIDI to ManualX / ManualY                                                   |
-
-Outputs two normalized float values: **X** and **Y**.
+This common structure makes it easier to move between different components and understand how they are configured.
 
 ---
 
-### Palette Generator
+## Example: MIDI Mapping
 
-Generates a color palette and outputs ramp keys for a Ramp TOP. You can save and recall the palette with the preset manager.
+1. Connect a MIDI In CHOP to the `midi_in` input.
+2. Enter MIDI Map Mode.
+3. Select the UI control you want to map.
+4. Move a control on your MIDI device.
+5. The UI control is now mapped.
 
-Select a base color with the color picker. Set its saturation and value. Turn on harmony modes, such as complementary or analogous, to generate additional colors.
-
-**INTERACT:**
-
-| Parameter       | Description                                       |
-| --------------- | ------------------------------------------------- |
-| Color Picker    | Set the base hue                                  |
-| Saturation      | Base color saturation (MIDI-mappable)             |
-| Value           | Base color brightness (MIDI-mappable)             |
-| Harmony Toggles | Complementary, analogous, and other harmony modes |
-
-**FINE CTRL:**
-
-| Parameter       | Description                     |
-| --------------- | ------------------------------- |
-| Transition Time | Fade time between color changes |
-
-**Drag & drop:** Drag from the bottom ramp preview to a Select DAT to get the ramp keys.
+MIDI mapping can also use other CHOP sources, allowing the same system to be used with OSC or custom control systems.
 
 ---
 
-### Tap Tempo
+## Example: sceneChanger
 
-Tap to set the global BPM. Cooldown time between taps is configurable in the okVJ_UI parameters.
+The Scene Changer is designed for projects where multiple complete scenes need to be recalled quickly.
 
----
+The basic workflow is:
 
-### Notes
+1. Generate a Scene Bank using **Generate Scene Bank Comp**.
+2. Build or connect your scenes inside the Scene Bank.
+3. Make sure each scene provides a TOP named `out1`.
+4. Connect the Scene Bank to the Scene Changer.
+5. Change **Scene Index** to switch scenes.
 
-A notepad for notes during setup or live performance.
+Scenes can share common inputs defined by the Scene Bank.
 
----
+The Scene Changer also provides configurable memory management for projects where VRAM usage is an important constraint. and a little preset manager, to recall presets of the scenes. 
 
-### topViewer
+## Examlpe: shaderChanger
 
-A panel for previewing TOPs. Drag and drop a TOP into the panel.
-
-> **Known issues:** If topViewer is set to fit the aspect of the content, it cannot be resized horizontally. It may also flicker slightly while resizing.
-
----
-
-### opViewer
-
-A panel for viewing any operator in TD. a CHOP, DAT, COMP, TOP etc etc
-
-Toggle "interactive" if you want to interact with the panel.
-
-### huePicker
-an HSV color picker
-
-## Automatic Mappings
-
-Some components, such as Step Sequencer and XY Modulator, support automatic mapping. When you add one of these components, okVJ UI looks for compatible source components, such as Audio Analysis, and connects them automatically with parameter expressions.
-
-Automatic mappings are refreshed when you add or remove a component that uses the mapping system.
+a collection of lightweight simple audioreactive shaders that can be used as texture layers to drown in effects, or to mix in and out of scenes with.
 
 ---
 
-## SAVING A UI-LAYOUT
-You can save a UI Layout if for example the is an okVJ update.
-under the Layout tab - press **Save Current Layout**
+# Documentation
 
-This will create a component that you can save or copy and paste.
+The documentation covers the common systems and individual components included in `okVJ`.
 
-you can add this component to the **Layout Comp** parameter and press **Load Layout**
-to load that layout.
+Documentation is included in the repository and is intended to grow alongside the toolkit.
 
-Presets and midimappings will not persist in layout saves (yet).
-
-## Frequently Asked Questions
-
-AI Generated FAQ:
-
-**How do I connect a UI control to a parameter in my TD network?**
-Drag directly from the control (or from the VALUES/OUTPUTS tab in the component's hamburger menu) into your TouchDesigner network. This creates a reference or binding without needing to write expressions manually. You can also use the UI output CHOP, but drag-and-drop is recommended for simpler networks.
-
-**Why are some UI elements greyed out or disabled?**
-Complex components like the XY Modulator or Step Sequencer disable certain controls until inputs are connected. Either enable **Create Automatic Mappings** so okVJ wires things up for you, or manually link inputs under the INPUTS tab.
-
-**The values jump when i move my MIDI device after having moved it with the mouse — how do I prevent this?**
-Enable **MIDI Channel Pickup** in the hamburger menu → General tab. The MIDI control won't take effect until its physical position crosses the current on-screen value.
-
-**Can I save and recall my control values?**
-Yes — use the Preset Manager (accessible from the hamburger menu). Make sure **Include in Preset** is enabled on each component you want stored. The preset manager uses the Tau Ceti module by alpha moonbase
-
-**Can the Step Sequencer run without an Audio Analysis component?**
-Yes — if no audio triggers are connected or BPM Mode is on, the sequencer clocks from the global BPM instead.
-
-**How do I remove a MIDI mapping?**
-Right-click the mapped element while in MIDI Map mode, or use **Remove All Midi Mappings** under the General tab to clear everything at once.
-
-**What audio does Audio Analysis listen to?**
-The audio input source is configured in the component. Use the Coarse Audio knob for input level and the FINE CTRL band settings (filter type, cutoff, resonance, rolloff) to isolate the frequency ranges you want to react to.
-
-**How do I set up the XY Modulator to react to my sequencer?**
-Add both a Step Sequencer and an Audio Analysis to the panel, and make sure **Create Automatic Mappings** is enabled. okVJ will wire the sequencer's gate output to the XY Modulator's trigger input automatically.
+**Documentation contributions are especially welcome.**
 
 ---
 
-https://okvj.live/docs/
+# Contributing
+
+Contributions are welcome, especially documentation.
+
+If you find a bug, have an idea for an improvement, have a feature request, or want to contribute a component or documentation update:
+
+1. Check the existing issues and documentation.
+2. Open an issue describing the problem or proposal.
+3. For code or documentation changes, open a pull request.
+4. Include enough context for others to understand the change and test it.
+
+We are particularly interested in contributions that make the toolkit easier to understand, use, and maintain.
+
+---
+
+# License
+
+`okVJ` is released under the **MIT License**.
+
+You are free to use, modify, distribute, and incorporate the software into your own projects, including commercial projects, subject to the terms of the license.
+
+See [`LICENSE`](LICENSE) for the complete license text.
+
+---
+
+# TouchDesigner
+
+`okVJ` is built for [TouchDesigner](https://derivative.ca/), the real-time visual development platform by Derivative.
+
+---
+
+# Status
+
+`okVJ` is an actively developed toolkit.
+
+It is an evolving collection of tools, and some components or documentation may be experimental, incomplete, and subject to change.
+
+If something is broken, unclear, or missing, please let us know.
+
+---
+
+# Credits
+
+Developed by **supermarket_sallad** and **VJ_BunBun**.
+
+Built with TouchDesigner.
+
+Special thanks to **jetXS (Michel Didier)**, who has helped us a lot during development.
+
+---
+
+**If you build something with `okVJ`, we'd love to see it.**
