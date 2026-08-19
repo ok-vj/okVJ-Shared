@@ -1,71 +1,188 @@
 # Scene Changer
 
-A component for switching between full scenes stored in a Scene Bank. Scenes are held in memory (with configurable strategies for how much VRAM that costs) so recall is fast and scenes keep their state between visits.
+A component for switching between full scenes stored in a Scene Bank.
+
+Scenes are held in memory, with configurable strategies for managing VRAM usage. This allows scenes to be recalled quickly while preserving their state between visits.
+
+---
 
 ## Setting It Up
 
-1. Press **Generate Scene Bank Comp**. This creates a Scene Bank you can wire your scenes into, and automatically links it to the **Scene Bank Comp** parameter.
-   - You can create and keep several Scene Banks, and swap between them on the fly. This is resource-intensive, and a swap will affect performance — see [Memory Manage](#memory-manage) below for strategies around this.
-2. Inside the Scene Bank are template scenes and documentation on how to wire up your own scenes.
-3. Each scene needs a TOP named `out1` on the TOP layer. You can build a custom component inside the scene and wire it up to `out1` following the included instructions.
+### 1. Generate a Scene Bank
 
-The general idea: several scenes can share the same set of inputs, defined once by customizing the Scene Bank component. Inside each scene, use the CHOP named **refNull** to reference those shared inputs.
+Press **Generate Scene Bank Comp**.
 
-The Scene Bank gates each scene — switching its inputs to a static constant when the scene isn't playing — so parameters don't force a cook while the scene is inactive.
+This creates a Scene Bank that you can wire your scenes into and automatically links it to the **Scene Bank Comp** parameter.
 
-### A Note on Memory
+You can create and keep multiple Scene Banks and switch between them at runtime. This is resource-intensive, and switching banks can affect performance. See [Memory Manage](#memory-manage) for strategies around memory usage.
 
-This component has built-in memory management to deal with how much VRAM the scenes consume.
+### 2. Configure the Scene Bank
 
-Our recommendation: it's generally worth using a fair amount of VRAM, because that keeps scenes quickly accessible. If you offload a scene on every change, you'll get stutters when recalling it again — and it won't be in the state you left it in. The [Memory Manage](#memory-manage) tab has several options for handling this trade-off.
+Inside the Scene Bank, you will find template scenes and documentation explaining how to wire your own scenes.
 
-## Parameters
+### 3. Configure Each Scene
 
-### Scene Changer
+Each scene must contain a TOP named `out1` on the TOP layer.
+
+You can build a custom component inside the scene and connect it to `out1` following the instructions included in the Scene Bank.
+
+### Shared Inputs
+
+Several scenes can share the same set of inputs. These inputs are defined once by customizing the Scene Bank component.
+
+Inside each scene, use the CHOP named **refNull** to reference these shared inputs.
+
+The Scene Bank gates each scene by switching its inputs to static constant values when the scene is not playing. This prevents parameters from forcing a cook while the scene is inactive.
+
+---
+
+## Memory Management
+
+The Scene Changer includes built-in memory management for controlling how much VRAM the scenes consume.
+
+In general, it is worth using a reasonable amount of VRAM to keep scenes quickly accessible.
+
+If a scene is unloaded every time you change scenes, recalling it again can cause stuttering. The scene will also no longer be in the state in which you left it.
+
+The **Memory Manage** page provides several options for balancing VRAM usage against recall speed.
+
+---
+
+# Parameters
+
+## Scene Changer
 
 | Parameter | Description |
 |---|---|
 | **Scene Bank Comp** | Reference to a Scene Bank component. |
-| **Scene Index** | The index of the scene. The scene changes when this value changes. |
+| **Scene Index** | Index of the active scene. The scene changes when this value changes. |
 | **Fade Time** | Fade time between scenes, in seconds. |
-| **Scene Names** *(read only)* | A Table DAT listing scene names in the first column, with formatted names (underscores removed and replaced with spaces) in the second column. |
-| **Sort Scenes** | Sets the display/playback order of the scenes. |
-| **Current Scene** | The formatted name of the currently active scene. |
+| **Scene Names** *(read only)* | A Table DAT containing scene names in the first column and formatted names in the second column. Formatting removes underscores and replaces them with spaces. |
+| **Sort Scenes** | Sets the display and playback order of the scenes. |
+| **Current Scene** | Formatted name of the currently active scene. |
 
-### Memory Manage
+---
+
+## Memory Manage
 
 | Parameter | Description |
 |---|---|
-| **Unload Prev Scene When Changing Scene** | Progressively unloads any scene that isn't currently playing. Cleans up VRAM between scenes, but causes stutter when a scene is reopened. *We perform with this off.* |
-| **Load All Scenes On Init** | Loads every scene in the current Scene Bank when the component initializes (on startup). Leave on or off depending on preference. |
-| **Unload Previous Bank When Changing Scenes** | Instead of unloading scene-by-scene, you can keep entire Scene Banks loaded in memory at once. This gives you quick recall between scenes within a bank, with longer, more predictable slowdowns only when switching banks. |
+| **Unload Prev Scene When Changing Scene** | Progressively unloads scenes that are no longer playing. This frees VRAM between scenes but can cause stuttering when a scene is reopened. *We perform with this disabled.* |
+| **Load All Scenes On Init** | Loads every scene in the current Scene Bank when the component initializes. Enable or disable this according to your preferred memory and startup behavior. |
+| **Unload Previous Bank When Changing Scenes** | Keeps entire Scene Banks loaded in memory instead of unloading individual scenes. This provides fast recall between scenes within a bank, with longer and more predictable slowdowns when switching banks. |
 | **Load All Scenes When Changing Banks** | Loads every scene in the new Scene Bank when switching banks. |
-| **Num Frames To Unload** | Unloading uses TouchDesigner's `progressiveUnload()`. This sets how many frames the unload should be spread across. |
+| **Num Frames To Unload** | Controls how many frames are used to spread the unload operation. Unloading uses TouchDesigner's `progressiveUnload()`. |
 
+---
 
-## okVJ_sceneBank
+# okVJ_sceneBank
 
-The Scene Bank component itself, generated by the Scene Changer's **Generate Scene Bank Comp** button.
+The Scene Bank component generated by the Scene Changer's **Generate Scene Bank Comp** button.
 
-### Parameters
+## Parameters
 
-#### Custom Values
+### CUSTOM VALUES
 
 Customize this page with any values you want to pass into your scenes.
 
-#### Common
+---
+
+### PRESETS
+
+A small preset manager is included in the `sceneTemplates`.
+
+See [Using the Little Preset Manager](#using-the-little-preset-manager).
+
+| Parameter | Description |
+|---|---|
+| **Preset Names DAT** | A DAT table containing the preset names. The table includes a header. |
+| **Current State** | The currently selected preset. The preset uses Flash Recall, so changing this menu immediately triggers the new preset transition. |
+| **Transition Time** | The time used to transition float values. |
+
+---
+
+### COMMON
 
 Values shared across all scenes in the bank:
 
 | Parameter | Description |
 |---|---|
 | **Render Resolution** | Sets the resolution of the scenes. |
-| **Aspect** *(read only)* | Computed once from Render Resolution (`Resw / Resw`) and reused as the aspect ratio value. |
-| **Reset Pulse** | A pulse for resetting a scene. Only affects the scene currently playing. |
+| **Aspect** *(read only)* | Computed from Render Resolution (`Resw / Resh`) and reused as the aspect ratio value. |
+| **Reset Pulse** | Resets the currently playing scene. |
+| **Raw Audio CHOP** | Passes a raw audio or multisample CHOP into the scene. |
 
-#### Snap
+---
+
+### SNAP
 
 | Parameter | Description |
 |---|---|
-| **Snap Parameters** | Snaps the parameters of all scenes — this is the state a scene will be in while it is *not* playing. Parameters snap automatically whenever the resolution changes. Pulse this parameter when you have customized your component |
-| **Zero Custom Pars On Snap** | If **True**, custom parameters are set to zero when snapped. |
+| **Snap Parameters** | Snaps the parameters of all scenes to their inactive state. Parameters are automatically snapped whenever the resolution changes. Pulse this parameter after customizing your component. |
+| **Zero Custom Pars On Snap** | When **True**, custom parameters are set to zero when snapped. |
+
+---
+
+# Using the Little Preset Manager
+
+The Scene Bank includes a small preset manager for storing and recalling component states.
+
+## Preset Names DAT
+
+A DAT table containing the preset names.
+
+- Preset names are stored in column `0`.
+- Each row contains one preset name.
+- The table must have a header named `names`.
+
+## Current State
+
+The currently selected preset.
+
+The preset manager uses hot swapping, so changing the preset immediately triggers the corresponding transition.
+
+## Save State
+
+Pulse this parameter to save the current state of the component to the preset manager.
+
+## Component
+
+Reference the component whose parameters should be read by the preset manager.
+
+## Page Scope
+
+Defines which parameter pages the preset manager should read.
+
+Pattern matching is supported.
+
+Use `*` to include all pages.
+
+## Par Names
+
+Defines which parameters should be included.
+
+## Transition Time
+
+Defines the transition time for fadeable parameters.
+
+## S-Curve Steepness
+
+Controls the steepness of the S-curve transition.
+
+## Active
+
+Defines whether the component is active.
+
+When the preset manager is used inside `Scene Changer`, this should be set to:
+
+```python
+parent.Scene.par.Play.eval()
+```
+
+---
+
+# Preset Manager and Custom Parameters
+
+If you plan to drive a parameter using both the preset manager and a custom parameter, use **refBind** (`bindCHOP`) instead of **refNull**.
+
+Using `refBind` prevents the preset manager from breaking the existing parameter references.

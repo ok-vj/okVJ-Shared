@@ -1,4 +1,5 @@
 # Shader Changer
+** THESE DOCS NEED UPDATING **
 
 A component that lets you pick shaders from a collection. Shaders are compiled on the fly, so you can keep a large library of simple content for very little VRAM cost — the number of shaders in the collection doesn't affect VRAM usage.
 

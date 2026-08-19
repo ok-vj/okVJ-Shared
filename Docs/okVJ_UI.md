@@ -1,7 +1,8 @@
 # okVJ_UI Documentation
 
-> **Note:** This documentation is incomplete and may be out of date. We are actively working on improving it.
-> If you find an issue or something that is unclear, please open an issue on GitHub. Contributions are very welcome.
+> **Note:** This documentation is incomplete and may be out of date. We are actively working to improve it.
+>
+> If you find an issue or something is unclear, please open an issue on GitHub. Contributions are welcome.
 
 ---
 
@@ -9,7 +10,7 @@
 
 `okVJ_UI` is a collection of UI components for TouchDesigner.
 
-The following sections describe the common functionality shared by most modules, followed by documentation for individual submodules.
+This documentation first describes functionality shared by most modules, followed by documentation for individual submodules.
 
 ---
 
@@ -23,16 +24,16 @@ Most interactive UI elements can be mapped to MIDI.
 
 Connect a MIDI In CHOP to the `midi_in` input of the `okVJ_UI` component.
 
-The input does not have to be MIDI. Any CHOP can be used if you want to map UI parameters from another source, such as OSC or a custom control system.
+The input does not have to be MIDI. Any CHOP can be used to map UI parameters from another source, such as OSC or a custom control system.
 
 ### Entering MIDI Map Mode
 
-There are several ways to enter MIDI Map Mode:
+You can enter MIDI Map Mode in any of the following ways:
 
-* Click **MIDI Map** in the top-right corner of the UI.
-* Press `Ctrl + Shift + M` on Windows/Linux.
-* Press `Cmd + Shift + M` on macOS.
-* Enable **MIDI Map** under the **GENERAL** page.
+- Click **MIDI Map** in the top-right corner of the UI.
+- Press `Ctrl + Shift + M` on Windows/Linux.
+- Press `Cmd + Shift + M` on macOS.
+- Enable **MIDI Map** on the **GENERAL** page.
 
 When MIDI Map Mode is active, a yellow outline appears around the UI component.
 
@@ -40,8 +41,8 @@ When MIDI Map Mode is active, a yellow outline appears around the UI component.
 
 1. Enter MIDI Map Mode.
 2. Click the UI element you want to map.
-3. Move a MIDI control on your MIDI device.
-4. The UI element is now mapped to that MIDI control.
+3. Move a control on your MIDI device.
+4. The UI element is mapped to that MIDI control.
 
 To remove a mapping, right-click the mapped UI element.
 
@@ -49,20 +50,20 @@ To remove a mapping, right-click the mapped UI element.
 
 The **GENERAL** page contains the following MIDI settings:
 
-| Parameter                    | Description                                                                                                                             |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| **MIDI Map**                 | Enables or disables MIDI Map Mode.                                                                                                      |
-| **MIDI Range**               | Defines the expected MIDI input range. Use `0-127` or `0-1`, depending on the source. An incorrect range can cause unexpected behavior. |
-| **Toggle Behavior**          | Controls how toggle buttons respond to MIDI.                                                                                            |
-| **View MIDI Map Table**      | Opens a table showing all current MIDI mappings.                                                                                        |
-| **Remove All MIDI Mappings** | Removes all MIDI mappings from the UI.                                                                                                  |
+| Parameter | Description |
+|---|---|
+| **MIDI Map** | Enables or disables MIDI Map Mode. |
+| **MIDI Range** | Defines the expected MIDI input range. Use `0-127` or `0-1`, depending on the source. An incorrect range can cause unexpected behavior. |
+| **Toggle Behavior** | Controls how toggle buttons respond to MIDI. |
+| **View MIDI Map Table** | Opens a table showing all current MIDI mappings. |
+| **Remove All MIDI Mappings** | Removes all MIDI mappings from the UI. |
 
 ### Toggle Behavior
 
 Toggle buttons have two MIDI modes:
 
-* **Toggle with MIDI** — The button toggles when it receives an ON message and toggles off when it receives another OFF message.
-* **Follow MIDI** — The button follows the current state of the MIDI input.
+- **Toggle with MIDI** — The button toggles when it receives an ON message and toggles off when it receives another OFF message.
+- **Follow MIDI** — The button follows the current state of the MIDI input.
 
 ---
 
@@ -70,9 +71,9 @@ Toggle buttons have two MIDI modes:
 
 Only **one Preset Manager** can be active in a project.
 
-The Preset Manager can store and recall the state of UI elements.
+The Preset Manager stores and recalls the state of UI elements.
 
-Each submodule has an **Include in Preset** parameter on its **COMMON** page. Disable this parameter to exclude that submodule from preset storage and recall.
+Each submodule has an **Include in Preset** parameter on its **COMMON** page. Disable this parameter to exclude the submodule from preset storage and recall.
 
 ## Storing a Preset
 
@@ -84,9 +85,9 @@ Each submodule has an **Include in Preset** parameter on its **COMMON** page. Di
 
 Select a preset from the dropdown.
 
-The Preset Manager uses **flash recall**, meaning the UI immediately switches to the selected preset.
+The Preset Manager uses **flash recall**, which means the UI immediately switches to the selected preset.
 
-If you press the currently selected preset, if for example you want to switch back to the same preset after changing states, the UI starts fading toward that preset.
+If you select the currently active preset again—for example, after changing its state—the UI starts fading toward that preset.
 
 ---
 
@@ -96,21 +97,21 @@ Many `okVJ_UI` elements support drag-and-drop connections.
 
 # Common UI Controls
 
-### Move Bar
+## Move Bar
 
 The line at the top of a submodule.
 
 Drag it to reposition the module in the UI.
 
-### X Button
+## X Button
 
 Destroys the submodule.
 
-### Hamburger Menu
+## Hamburger Menu
 
 Opens the parameters for the submodule.
 
-### + / - Buttons
+## + / - Buttons
 
 Add or remove operators inside the submodule.
 
@@ -128,29 +129,29 @@ Enable **Match UI** to override the style for an individual submodule.
 
 Common parameters shared by submodules include:
 
-| Parameter             | Description                                                         |
-| --------------------- | ------------------------------------------------------------------- |
-| **Edit Mode**         | Read-only parameter that reports the current UI Edit Mode state.    |
+| Parameter | Description |
+|---|---|
+| **Edit Mode** | Read-only parameter that reports the current UI Edit Mode state. |
 | **Include in Preset** | Determines whether the submodule is included in the Preset Manager. |
-| **Page**              | Selects which `okVJ_UI` page displays the element.                  |
-| **Show on All Pages** | Displays the element on every UI page.                              |
+| **Page** | Selects which `okVJ_UI` page displays the element. |
+| **Show on All Pages** | Displays the element on every UI page. |
 
 ---
 
 # INTERACT Page
 
-Contains parameters that can be directly controlled through the UI.
+Contains parameters that can be controlled directly through the UI.
 
 ---
 
 # VALUES Page
 
-Contains the input and output values of interactive controls such as:
+Contains the input and output values of interactive controls, such as:
 
-* Sliders
-* Buttons
-* Knobs
-* Other interactive elements
+- Sliders
+- Buttons
+- Knobs
+- Other interactive elements
 
 ---
 
@@ -170,7 +171,7 @@ Contains additional parameters for more precise control of the submodule.
 
 Some components receive inputs from other `okVJ_UI` submodules.
 
-These inputs may be required for the component to have full functionality.
+These inputs may be required for the component to provide full functionality.
 
 ## Create Automatic Mappings
 
@@ -186,28 +187,27 @@ This option is enabled by default.
 
 Analyzes an audio signal and generates four continuous values and four triggers:
 
-* Low
-* Mid
-* High
-* Total
+- Low
+- Mid
+- High
+- Total
 
 ### Interact
 
-The following parameters can be controlled from the UI:
+The following parameters can be controlled directly from the UI:
 
-* **Main Slider** — Controls the main audio attenuation.
-* **Trigger Threshold Low** — Threshold for the low-frequency trigger.
-* **Trigger Threshold Mid** — Threshold for the mid-frequency trigger.
-* **Trigger Threshold High** — Threshold for the high-frequency trigger.
-* **Trigger Threshold Total** — Threshold for the total audio trigger.
+- **Main Slider** — Controls the main audio attenuation.
+- **Trigger Threshold Low** — Threshold for the low-frequency trigger.
+- **Trigger Threshold Mid** — Threshold for the mid-frequency trigger.
+- **Trigger Threshold High** — Threshold for the high-frequency trigger.
+- **Trigger Threshold Total** — Threshold for the total audio trigger.
 
 When the audio level crosses a trigger threshold, the corresponding trigger fires.
 
 ### Drag and Drop
 
-Drag from an audio level bar to obtain the corresponding audio value.
-
-Drag from a spectrum trigger to obtain the corresponding trigger output.
+- Drag from an audio level bar to obtain the corresponding audio value.
+- Drag from a spectrum trigger to obtain the corresponding trigger output.
 
 ### Parameters
 
@@ -235,24 +235,26 @@ Each frequency band has its own filter.
 
 Available parameters include:
 
-* **Filter** — Selects the filter type, such as low-pass, band-pass, or high-pass.
-* **Filter Cutoff** — Filter cutoff frequency in Hz.
-* **Filter Resonance** — Controls filter resonance.
-* **Rolloff** — Controls filter steepness in dB per octave.
-* **Attenuate** — Applies attenuation after filtering and RMS calculation.
-* **Smoothing** — Controls smoothing of the output signal.
+| Parameter | Description |
+|---|---|
+| **Filter** | Selects the filter type, such as low-pass, band-pass, or high-pass. |
+| **Filter Cutoff** | Sets the filter cutoff frequency in Hz. |
+| **Filter Resonance** | Controls filter resonance. |
+| **Rolloff** | Controls filter steepness in dB per octave. |
+| **Attenuate** | Applies attenuation after filtering and RMS calculation. |
+| **Smoothing** | Controls smoothing of the output signal. |
 
 ### Outputs
 
-| Output            | Description                                                   |
-| ----------------- | ------------------------------------------------------------- |
-| **Low Val**       | Low-frequency audio level.                                    |
-| **Mid Val**       | Mid-frequency audio level.                                    |
-| **High Val**      | High-frequency audio level.                                   |
-| **Total Val**     | Total analyzed audio level.                                   |
-| **Low Trigger**   | Trigger generated when the low level crosses its threshold.   |
-| **Mid Trigger**   | Trigger generated when the mid level crosses its threshold.   |
-| **High Trigger**  | Trigger generated when the high level crosses its threshold.  |
+| Output | Description |
+|---|---|
+| **Low Val** | Low-frequency audio level. |
+| **Mid Val** | Mid-frequency audio level. |
+| **High Val** | High-frequency audio level. |
+| **Total Val** | Total analyzed audio level. |
+| **Low Trigger** | Trigger generated when the low level crosses its threshold. |
+| **Mid Trigger** | Trigger generated when the mid level crosses its threshold. |
+| **High Trigger** | Trigger generated when the high level crosses its threshold. |
 | **Total Trigger** | Trigger generated when the total level crosses its threshold. |
 
 ---
@@ -267,19 +269,19 @@ This allows you to change the balance between low, mid, and high frequencies wit
 
 By default, the inputs are automatically connected to the **Audio Analysis** component:
 
-* Low Val
-* Mid Val
-* High Val
+- Low Val
+- Mid Val
+- High Val
 
 ### Interact
 
 Three attenuation controls are available:
 
-* Low
-* Mid
-* High
+- Low
+- Mid
+- High
 
-The controls are arranged from left to right as:
+The controls are arranged from left to right:
 
 **Low → Mid → High**
 
@@ -313,8 +315,8 @@ Sets the spacing between buttons in panel units/pixels.
 
 Selects between:
 
-* Toggle
-* Momentary
+- Toggle
+- Momentary
 
 ### Styling
 
@@ -342,9 +344,9 @@ An HSV color selector.
 
 The following values can be controlled:
 
-* Hue
-* Saturation
-* Value
+- Hue
+- Saturation
+- Value
 
 ### Output
 
@@ -480,19 +482,19 @@ Selects which column is used for the button labels.
 
 You can drag and drop the following into the Radio Buttons component:
 
-* A DAT table
-* A DAT parameter object
-* A TouchDesigner menu parameter
+- A DAT table
+- A DAT parameter object
+- A TouchDesigner menu parameter
 
 When a menu parameter is dropped, it is converted into a DAT table.
 
-> **Note:** A DAT table created from a menu parameter will not automatically update when the original menu parameter changes.
+> **Note:** A DAT table created from a menu parameter does not automatically update when the original menu parameter changes.
 
 ### Output
 
 Drag from any radio button to create a connection to the **Index** parameter.
 
-The Index is a zero-based integer representing the selected button.
+**Index** is a zero-based integer representing the selected button.
 
 ---
 
@@ -536,13 +538,103 @@ A step sequencer.
 
 By default, the component receives audio triggers from the **Audio Analysis** component:
 
-* Low Trigger
-* Mid Trigger
-* High Trigger
-* Total Trigger
+- Low Trigger
+- Mid Trigger
+- High Trigger
+- Total Trigger
 
 ---
 
 ## timeKeeper
-speed generator - can be used instead of absTime.seconds for eg
-> Documentation to be added.
+
+A time generator that can be used instead of `absTime.seconds`.
+
+The input can also be set to audio or the sequencer. This allows you to speed up or reverse time dynamically.
+
+### Inputs
+
+- Seq Gate
+- Low audio
+- Mid audio
+- High audio
+- Total audio
+
+### Interact
+
+**Reset**
+
+Resets the time value.
+
+**Input Index**
+
+Selects which input drives the speed:
+
+| Index | Input |
+|---:|---|
+| `0` | Constant |
+| `1` | Low |
+| `2` | Mid |
+| `3` | High |
+| `4` | Total |
+| `5` | Seq Gate |
+
+**Speed Attenuate**
+
+Controls the direction and speed:
+
+- Values below `0.5` reverse the time.
+- Values above `0.5` move the time forward.
+
+**Attack**
+
+Controls the attack of the inputs.
+
+**Release**
+
+Controls the release of the inputs.
+
+### Fine CTRL
+
+**Max Val**
+
+Attenuates the maximum speed.
+
+**Constant Val**
+
+Adds a constant value to the speed.
+
+### Outputs
+
+**Time**
+
+The accumulated time value.
+
+---
+
+## topViewer
+
+Displays a TOP OP.
+
+---
+
+## xyModulator
+
+### MIDI Mapping
+
+1. Click once to arm the component.
+2. Move one MIDI slider to map X.
+3. Move another MIDI slider to map Y.
+
+> **Note:** Documentation to be added.
+
+---
+
+## xyPads
+
+### MIDI Mapping
+
+1. Click once to arm the component.
+2. Move one MIDI slider to map X.
+3. Move another MIDI slider to map Y.
+
+> **Note:** Documentation to be added.
